@@ -1,0 +1,5 @@
+---
+Name: nswdpc-curatorio-feed
+---
+NSWDPC\Elemental\Models\Curator\ElementCuratorFeedWidget:
+  include_powered_by: true
