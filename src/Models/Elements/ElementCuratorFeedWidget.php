@@ -4,6 +4,7 @@ namespace NSWDPC\Elemental\Models\Curator;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\TextareaField;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Forms\RequiredFields;
@@ -39,6 +40,7 @@ class ElementCuratorFeedWidget extends BaseElement {
     private static $db = [
         'CuratorFeedId' => 'Varchar(255)',
         'CuratorContainerId' => 'Varchar(255)',
+        'FeedDescription' => 'Text'
     ];
 
     /**
@@ -148,7 +150,13 @@ class ElementCuratorFeedWidget extends BaseElement {
                         __CLASS__ . '.CURATOR_FEED_ID_DESCRIPTION',
                         "This is the 'Container ID' value found in the 'Style &gt; Advanced' section"
                     )
-                )->setAttribute('required','required')
+                )->setAttribute('required','required'),
+
+                TextareaField::create(
+                    'FeedDescription',
+                    'Feed description'
+                )
+
             ]
         );
         return $fields;
