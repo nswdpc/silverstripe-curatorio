@@ -3,8 +3,7 @@
 namespace NSWDPC\Elemental\Models\Curator;
 
 use DNADesign\Elemental\Models\BaseElement;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\TextareaField;
+use Silverstripe\Forms\DropdownField;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Forms\RequiredFields;
@@ -37,10 +36,19 @@ class ElementCuratorFeedWidget extends BaseElement {
      */
     private static $include_powered_by = true;
 
+    /**
+     * These values are deprecated and will be removed
+     * in a later update
+     * CuratorFeed::requireDefaultRecords migrates them to CuratorFeed records
+     */
     private static $db = [
         'CuratorFeedId' => 'Varchar(255)',
         'CuratorContainerId' => 'Varchar(255)',
         'FeedDescription' => 'Text'
+    ];
+
+    private static $has_one = [
+        'CuratorFeedRecord' => CuratorFeed::class,
     ];
 
     /**
@@ -52,74 +60,30 @@ class ElementCuratorFeedWidget extends BaseElement {
         return _t(__CLASS__ . '.BlockType', 'Curator.io Feed Widget');
     }
 
-    public function onBeforeWrite()
-    {
-        parent::onBeforeWrite();
-        if($this->exists()) {
-            if(empty($this->CuratorFeedId)) {
-                throw new ValidationException(
-                    _t(__CLASS__ . ".NO_FEED_ID","Please provide a Curator.io Feed Id")
-                );
-            }
-
-            if(empty($this->CuratorContainerId)) {
-                throw new ValidationException(
-                    _t(__CLASS__ . ".NO_FEED_ID","Please provide a Curator.io Container Id")
-                );
-            }
-
-        }
-    }
-
     /**
      * Return a nicer anchor title
      * @return string
      */
     public function getAnchorTitle() {
         return _t(
-                __CLASS__ . '.FEED_TITLE',
-                "Curator.io feed {feedid}",
-                [
-                    'feedid' => $this->CuratorFeedId
-                ]
+            __CLASS__ . '.FEED_TITLE',
+            "Curator.io feed {feedid}",
+            [
+                'feedid' => $this->CuratorFeedId
+            ]
         );
     }
 
     /**
-     * Free accounts require this text in the template.
-     * You can turn this off in project conifiguration
-     * @return bool
-     */
-    public function IncludePoweredBy() {
-        return $this->config()->get('include_powered_by');
-    }
-
-    public function getCustomFeedScript() {
-        return $this->renderWith("NSWDPC/Elemental/Models/Curator/FeedScript");
-    }
-
-    /**
-     * Apply requirements when templating
+     * Render with the Curator Feed record
      */
     public function forTemplate($holder = true)
     {
-        // Avoid adding requirements multiple times
-        if(!$this->_cache_is_rendered) {
-            // add the requirements for this feed
-            Requirements::customScript(
-                $this->getCustomFeedScript(),
-                "curator_feed_{$this->CuratorFeedId}" // uniqueness
-            );
+        $feed = $this->CuratorFeedRecord();
+        if($feed) {
+            return $feed->forTemplate();
         }
-        $this->_cache_is_rendered =  true;
-        return parent::forTemplate($holder);
-    }
-
-    public function getCMSValidator()
-    {
-        return new RequiredFields([
-            'CuratorFeedId','CuratorContainerId'
-        ]);
+        return '';
     }
 
     /**
@@ -128,35 +92,17 @@ class ElementCuratorFeedWidget extends BaseElement {
      */
     public function getCMSFields() {
         $fields = parent::getCMSFields();
+
+        $fields->removeByName(['CuratorFeedId','CuratorContainerId','FeedDescription']);
+
         $fields->addFieldsToTab(
             'Root.Main',
             [
-
-                TextField::create(
-                    'CuratorFeedId',
-                    'Curator.io Feed Id'
-                )->setDescription(
-                    _t(
-                        __CLASS__ . '.CURATOR_FEED_ID_DESCRIPTION',
-                        "This is the 'Feed ID' value found in the 'Style' section"
-                    )
-                )->setAttribute('required','required'),
-
-                TextField::create(
-                    'CuratorContainerId',
-                    'Curator.io Container Id'
-                )->setDescription(
-                    _t(
-                        __CLASS__ . '.CURATOR_FEED_ID_DESCRIPTION',
-                        "This is the 'Container ID' value found in the 'Style &gt; Advanced' section"
-                    )
-                )->setAttribute('required','required'),
-
-                TextareaField::create(
-                    'FeedDescription',
-                    'Feed description'
-                )
-
+                DropdownField::create(
+                    'CuratorFeedRecordID',
+                    _t(__CLASS__. '.SELECT_CURATOR_FEED', 'Select a Curator.io feed'),
+                    CuratorFeed::get()->map('ID', 'Title')
+                )->setEmptyString('')
             ]
         );
         return $fields;

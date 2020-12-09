@@ -3,3 +3,9 @@ Name: nswdpc-curatorio-feed
 ---
 NSWDPC\Elemental\Models\Curator\ElementCuratorFeedWidget:
   include_powered_by: true
+---
+Name: nswdpc-curatorio-feed-extensions
+---
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - 'NSWDPC\Elemental\Extensions\Curator\SiteConfigExtension'
