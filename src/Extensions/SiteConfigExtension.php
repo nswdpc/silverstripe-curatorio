@@ -33,4 +33,25 @@ class SiteConfigExtension extends DataExtension
         );
     }
 
+    /**
+     * To add the field to your own SiteConfig extension, call this method
+     * e.g $this->owner->getSocialFeedSelector()
+     * @return DropdownField
+     */
+    public function getSocialFeedSelector() : DropdownField {
+        $field = DropdownField::create(
+            'CuratorFeedRecordID',
+            _t(__CLASS__. '.SELECT_CURATOR_FEED', 'Select a global Curator.io feed'),
+            CuratorFeed::get()->map('ID', 'Title')
+        )->setEmptyString('');
+        return $field;
+    }
+
+    /**
+     * @return CuratorFeed|null
+     */
+    public function getSocialFeedRecord() {
+        return $this->owner->CuratorFeedRecord();
+    }
+
 }
