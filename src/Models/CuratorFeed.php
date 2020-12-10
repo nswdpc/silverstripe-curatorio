@@ -22,7 +22,6 @@ use SilverStripe\View\ArrayData;
 class CuratorFeed extends DataObject implements PermissionProvider {
 
     private static $table_name = 'CuratorFeed';
-    private static $icon = 'font-icon-code';
     private static $singular_name = 'Curator.io feed';
     private static $plural_name = 'Curator.io feeds';
 
@@ -33,6 +32,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
     private static $include_powered_by = true;
 
     private static $db = [
+        'Title' => 'Varchar(255)',
         'CuratorFeedId' => 'Varchar(255)',
         'CuratorContainerId' => 'Varchar(255)',
         'CuratorFeedDescription' => 'Text'
@@ -44,20 +44,18 @@ class CuratorFeed extends DataObject implements PermissionProvider {
     ];
 
     private static $summary_fields = [
+        'Title' => 'Title',
         'CuratorFeedId' => 'Curator Feed ID',
         'CuratorContainerId' => 'Curator Container ID',
         'CuratorFeedDescription' => 'Description'
     ];
 
-    public function getTitle() {
-        return _t(
-            __CLASS__ . ".CURATOR_FEED_TITLE",
-            "Curator feed - {feedid}",
-            [
-                'feedid' => $this->CuratorFeedId
-            ]
-        );
-    }
+    private static $searchable_fields = [
+        'Title' => 'PartialMatchFilter',
+        'CuratorFeedId' => 'PartialMatchFilter',
+        'CuratorContainerId' => 'PartialMatchFilter',
+        'CuratorFeedDescription' => 'PartialMatchFilter'
+    ];
 
     public function onBeforeWrite()
     {
@@ -120,11 +118,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         return $this->renderWith("NSWDPC/Elemental/Models/Curator/FeedScript");
     }
 
-    /**
-     * Apply requirements when templating
-     */
-    public function forTemplate($holder = true)
-    {
+    public function supplyRequirements() {
         // Avoid adding requirements multiple times
         if(!$this->_cache_is_rendered) {
             // add the requirements for this feed
@@ -134,10 +128,15 @@ class CuratorFeed extends DataObject implements PermissionProvider {
             );
         }
         $this->_cache_is_rendered =  true;
-        $data = ArrayData::create([
-            'FeedDescription' => $this->CuratorFeedDescription // provided for BC for templates
-        ]);
-        return $this->customise($data)->renderWith(ElementCuratorFeedWidget::class);
+    }
+
+    /**
+     * Apply requirements when templating
+     */
+    public function forTemplate($holder = true)
+    {
+        $this->supplyRequirements();
+        return $this->renderWith(ElementCuratorFeedWidget::class);
     }
 
     public function getCMSValidator()
@@ -156,6 +155,15 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         $fields->addFieldsToTab(
             'Root.Main',
             [
+                TextField::create(
+                    'Title',
+                    _t(__CLASS__. '.CURATOR_TITLE', 'Title'),
+                )->setDescription(
+                    _t(
+                        __CLASS__ . '.CURATOR_TITLE_DESCRIPTION',
+                        "A title used to describe the feed"
+                    )
+                ),
 
                 TextField::create(
                     'CuratorFeedId',

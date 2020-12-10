@@ -1,8 +1,8 @@
 <div class="content-element__content<% if $StyleVariant %> {$StyleVariant}<% end_if %>">
     <% include ElementCuratorFeedWidgetTitle %>
-    <% if $FeedDescription %>
-        <div class="description">
-            <p>$FeedDescription.XML</p>
+    <% if $CuratorFeedDescription %>
+        <div class="nsw-instagram-feed__description">
+            <p>$CuratorFeedDescription.XML</p>
         </div>
     <% end_if %>
     <div id="{$CuratorContainerId.XML}">

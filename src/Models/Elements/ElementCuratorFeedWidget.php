@@ -7,6 +7,7 @@ use Silverstripe\Forms\DropdownField;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Forms\RequiredFields;
+use SilverStripe\View\ArrayData;
 
 /**
  * Provides a Curator Widget Element
@@ -18,7 +19,7 @@ class ElementCuratorFeedWidget extends BaseElement {
 
     private static $table_name = 'ElementCuratorFeedWidget';
 
-    private static $icon = 'font-icon-code';
+    private static $icon = 'font-icon-block-carousel';
 
     private static $inline_editable = true;
 
@@ -37,8 +38,7 @@ class ElementCuratorFeedWidget extends BaseElement {
     private static $include_powered_by = true;
 
     /**
-     * These values are deprecated and will be removed
-     * in a later update
+     * These values are deprecated and will be removed in a later update
      * CuratorFeed::requireDefaultRecords migrates them to CuratorFeed records
      */
     private static $db = [
@@ -79,9 +79,15 @@ class ElementCuratorFeedWidget extends BaseElement {
      */
     public function forTemplate($holder = true)
     {
+        // Ensure the element values are used for rendering
         $feed = $this->CuratorFeedRecord();
         if($feed) {
-            return $feed->forTemplate();
+            $data = ArrayData::create([
+                'Title' => $this->Title,
+                'ShowTitle' => $this->ShowTitle,
+            ]);
+            $feed->supplyRequirements();
+            return $feed->customise($data)->renderWith( self::class );
         }
         return '';
     }
