@@ -226,7 +226,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
                 'category' => 'Curator.io',
             ],
             'CURATOR_FEED_EDIT' => [
-                'name' => 'Edit a Curator feedn',
+                'name' => 'Edit a Curator feed',
                 'category' => 'Curator.io',
             ],
             'CURATOR_FEED_CREATE' => [
