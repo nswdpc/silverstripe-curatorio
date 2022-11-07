@@ -11,8 +11,11 @@ use SilverStripe\View\ArrayData;
 
 /**
  * Provides a Curator Widget Element
- * Editors provide a Curator Feed ID and Container ID of a published feed
- * Feed curation occurs in the Curator.io administration area
+ *
+ * Editors select an existing Curator feed record to display
+ *
+ * Feed curation occurs in the Curator.io administration area at app.curator.io
+ *
  * @author James Ellis
  */
 class ElementCuratorFeedWidget extends BaseElement {
