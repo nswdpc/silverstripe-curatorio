@@ -1,0 +1,11 @@
+NSWDPC\Elemental\Models\Curator\CuratorFeed:
+  testfeed1:
+    Title: 'My test feed'
+    CuratorFeedId: '47eff61b-f8c7-4044-a2c2-ed773b8f57a5'
+    CuratorContainerId: 'curator-feed-default-feed-layout'
+    CuratorFeedDescription: 'test description of the feed'
+NSWDPC\Elemental\Models\Curator\ElementCuratorFeedWidget:
+  testfeedelement1:
+    Title: 'Test element 1'
+    CuratorFeedRecord: '=>NSWDPC\Elemental\Models\Curator\CuratorFeed.testfeed1'
+
