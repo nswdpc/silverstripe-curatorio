@@ -64,16 +64,6 @@ class ElementCuratorFeedWidget extends BaseElement {
     private static $include_powered_by = true;
 
     /**
-     * These values are deprecated and will be removed in a later update
-     * CuratorFeed::requireDefaultRecords migrates them to CuratorFeed records
-     */
-    private static $db = [
-        'CuratorFeedId' => 'Varchar(255)',
-        'CuratorContainerId' => 'Varchar(255)',
-        'FeedDescription' => 'Text'
-    ];
-
-    /**
      * @inheritdoc
      */
     private static $has_one = [
@@ -94,11 +84,12 @@ class ElementCuratorFeedWidget extends BaseElement {
      * @return string
      */
     public function getAnchorTitle() {
+        $feed = $this->CuratorFeedRecord();
         return _t(
             __CLASS__ . '.FEED_TITLE',
             "Curator.io feed {feedid}",
             [
-                'feedid' => $this->CuratorFeedId
+                'feedid' => isset($feed->CuratorFeedId) ? $feed->CuratorFeedId : _t(__CLASS__ . '.NO_FEED_ID', '(no feed id)')
             ]
         );
     }
@@ -126,9 +117,6 @@ class ElementCuratorFeedWidget extends BaseElement {
      */
     public function getCMSFields() {
         $fields = parent::getCMSFields();
-
-        $fields->removeByName(['CuratorFeedId','CuratorContainerId','FeedDescription']);
-
         $fields->addFieldsToTab(
             'Root.Main',
             [
