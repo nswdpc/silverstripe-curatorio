@@ -2,6 +2,7 @@
 
 namespace NSWDPC\Elemental\Models\Curator;
 
+use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\View\Requirements;
@@ -47,9 +48,9 @@ class CuratorFeed extends DataObject implements PermissionProvider {
      */
     private static $db = [
         'Title' => 'Varchar(255)',
+        'CuratorFeedDescription' => 'Text',
         'CuratorFeedId' => 'Varchar(255)',
-        'CuratorContainerId' => 'Varchar(255)',
-        'CuratorFeedDescription' => 'Text'
+        'CuratorContainerId' => 'Varchar(255)'
     ];
 
     /**
@@ -65,7 +66,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
      */
     private static $summary_fields = [
         'Title' => 'Title',
-        'CuratorFeedId' => 'Curator Feed ID',
+        'CuratorFeedId' => 'Curator Feed Public Key',
         'CuratorContainerId' => 'Curator Container ID',
         'CuratorFeedDescription' => 'Description'
     ];
@@ -89,7 +90,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         if($this->exists()) {
             if(empty($this->CuratorFeedId)) {
                 throw new ValidationException(
-                    _t(__CLASS__ . ".NO_FEED_ID","Please provide a Curator.io Feed Id")
+                    _t(__CLASS__ . ".NO_FEED_ID","Please provide a Curator.io Feed Public Key")
                 );
             }
 
@@ -186,44 +187,71 @@ class CuratorFeed extends DataObject implements PermissionProvider {
      */
     public function getCMSFields() {
         $fields = parent::getCMSFields();
+        $fields->removeByName([
+            'Title',
+            'CuratorFeedDescription',
+            'CuratorFeedId',
+            'CuratorContainerId'
+        ]);
         $fields->addFieldsToTab(
             'Root.Main',
             [
-                TextField::create(
-                    'Title',
-                    _t(__CLASS__. '.CURATOR_TITLE', 'Title'),
-                )->setDescription(
+                CompositeField::create(
+                    TextField::create(
+                        'Title',
+                        _t(__CLASS__. '.CURATOR_TITLE', 'Title'),
+                    )->setDescription(
+                        _t(
+                            __CLASS__ . '.CURATOR_TITLE_DESCRIPTION',
+                            "This value identifies the feed on this website"
+                        )
+                    ),
+
+                    TextareaField::create(
+                        'CuratorFeedDescription',
+                        _t(
+                            __CLASS__ . '.CURATOR_FEED_DESCRIPTION',
+                            "Description"
+                        )
+                    )->setDescription(
+                        _t(
+                            __CLASS__ . '.CURATOR_FEED_DESCRIPTION_DESCRIPTION',
+                            "This value could be displayed on your website"
+                        )
+                    )
+                )->setTitle(
                     _t(
-                        __CLASS__ . '.CURATOR_TITLE_DESCRIPTION',
-                        "A title used to describe the feed"
+                        __CLASS__ . '.CURATOR_FEED_ADMIN_WEBSITE_INFO',
+                        "Describe this feed"
                     )
                 ),
 
-                TextField::create(
-                    'CuratorFeedId',
-                    'Curator.io Feed Id'
-                )->setDescription(
-                    _t(
-                        __CLASS__ . '.CURATOR_FEED_ID_DESCRIPTION',
-                        "This is the 'Feed ID' value found in the 'Style' section"
-                    )
-                )->setAttribute('required','required'),
+                CompositeField::create(
 
-                TextField::create(
-                    'CuratorContainerId',
-                    'Curator.io Container Id'
-                )->setDescription(
-                    _t(
-                        __CLASS__ . '.CURATOR_FEED_ID_DESCRIPTION',
-                        "This is the 'Container ID' value found in the 'Style &gt; Advanced' section"
-                    )
-                )->setAttribute('required','required'),
+                    TextField::create(
+                        'CuratorFeedId',
+                        'Feed Public Key'
+                    )->setDescription(
+                        _t(
+                            __CLASS__ . '.CURATOR_FEED_ID_DESCRIPTION',
+                            "You can find this value in the 'Publish' section under 'Feed Public Key' at app.curator.io"
+                        )
+                    )->setAttribute('required','required'),
 
-                TextareaField::create(
-                    'CuratorFeedDescription',
+                    TextField::create(
+                        'CuratorContainerId',
+                        'Container Id'
+                    )->setDescription(
+                        _t(
+                            __CLASS__ . '.CURATOR_FEED_ID_DESCRIPTION',
+                            "You can find this value in the 'Publish' section under 'Advanced' at app.curator.io"
+                        )
+                    )->setAttribute('required','required')
+
+                )->setTitle(
                     _t(
-                        __CLASS__ . '.CURATOR_FEED_DESCRIPTION',
-                        "Feed description"
+                        __CLASS__ . '.CURATOR_FEED_ADMIN_CURATOR_INFO',
+                        "Settings from app.curator.io"
                     )
                 )
 
