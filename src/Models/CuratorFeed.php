@@ -84,6 +84,13 @@ class CuratorFeed extends DataObject implements PermissionProvider {
     /**
      * @inheritdoc
      */
+    private static $has_many = [
+        'FeedWidgets' => ElementCuratorFeedWidget::class
+    ];
+
+    /**
+     * @inheritdoc
+     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
