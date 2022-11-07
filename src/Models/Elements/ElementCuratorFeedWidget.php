@@ -17,18 +17,44 @@ use SilverStripe\View\ArrayData;
  */
 class ElementCuratorFeedWidget extends BaseElement {
 
+    /**
+     * @inheritdoc
+     */
     private static $table_name = 'ElementCuratorFeedWidget';
 
+    /**
+     * @inheritdoc
+     */
     private static $icon = 'font-icon-block-carousel';
 
+    /**
+     * @inheritdoc
+     */
     private static $inline_editable = true;
 
+    /**
+     * @inheritdoc
+     */
     private static $singular_name = 'Curator.io feed widget';
+
+    /**
+     * @inheritdoc
+     */
     private static $plural_name = 'Curator.io feed widgets';
 
+    /**
+     * @inheritdoc
+     */
     private static $title = 'Curator.io feed widget';
+
+    /**
+     * @inheritdoc
+     */
     private static $description = 'Display a published feed from Curator.io';
 
+    /**
+     * Store whether the element was rendered in this instance
+     */
     private $_cache_is_rendered = false;
 
     /**
@@ -47,6 +73,9 @@ class ElementCuratorFeedWidget extends BaseElement {
         'FeedDescription' => 'Text'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $has_one = [
         'CuratorFeedRecord' => CuratorFeed::class,
     ];
@@ -75,7 +104,7 @@ class ElementCuratorFeedWidget extends BaseElement {
     }
 
     /**
-     * Render with the Curator Feed record
+     * Render this element with the Curator Feed record
      */
     public function forTemplate($holder = true)
     {
@@ -93,8 +122,7 @@ class ElementCuratorFeedWidget extends BaseElement {
     }
 
     /**
-     * Apply edit fields for the element administration area
-     * @return Fieldlist
+     * @inheritdoc
      */
     public function getCMSFields() {
         $fields = parent::getCMSFields();

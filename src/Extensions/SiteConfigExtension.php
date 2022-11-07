@@ -15,10 +15,16 @@ use Silverstripe\Forms\DropdownField;
 class SiteConfigExtension extends DataExtension
 {
 
+    /**
+     * @inheritdoc
+     */
     private static $has_one = [
         'CuratorFeedRecord' => CuratorFeed::class
     ];
 
+    /**
+     * @inheritdoc
+     */
     public function updateCmsFields(FieldList $fields)
     {
         $fields->addFieldsToTab(

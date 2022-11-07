@@ -21,8 +21,19 @@ use SilverStripe\View\ArrayData;
  */
 class CuratorFeed extends DataObject implements PermissionProvider {
 
+    /**
+     * @inheritdoc
+     */
     private static $table_name = 'CuratorFeed';
+
+    /**
+     * @inheritdoc
+     */
     private static $singular_name = 'Curator.io feed';
+
+    /**
+     * @inheritdoc
+     */
     private static $plural_name = 'Curator.io feeds';
 
     /**
@@ -31,6 +42,9 @@ class CuratorFeed extends DataObject implements PermissionProvider {
      */
     private static $include_powered_by = true;
 
+    /**
+     * @inheritdoc
+     */
     private static $db = [
         'Title' => 'Varchar(255)',
         'CuratorFeedId' => 'Varchar(255)',
@@ -38,11 +52,17 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         'CuratorFeedDescription' => 'Text'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $indexes = [
         'CuratorFeedId' => true,
         'CuratorContainerId' => true,
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $summary_fields = [
         'Title' => 'Title',
         'CuratorFeedId' => 'Curator Feed ID',
@@ -50,6 +70,9 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         'CuratorFeedDescription' => 'Description'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $searchable_fields = [
         'Title' => 'PartialMatchFilter',
         'CuratorFeedId' => 'PartialMatchFilter',
@@ -57,6 +80,9 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         'CuratorFeedDescription' => 'PartialMatchFilter'
     ];
 
+    /**
+     * @inheritdoc
+     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -114,10 +140,16 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         return $this->config()->get('include_powered_by');
     }
 
+    /**
+     * Return this record rendered into the feed script template
+     */
     public function getCustomFeedScript() {
         return $this->renderWith("NSWDPC/Elemental/Models/Curator/FeedScript");
     }
 
+    /**
+     * Push the custom script for this feed into the Requirements API
+     */
     public function supplyRequirements() {
         // Avoid adding requirements multiple times
         if(!$this->_cache_is_rendered) {
@@ -139,6 +171,9 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         return $this->renderWith(ElementCuratorFeedWidget::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getCMSValidator()
     {
         return new RequiredFields([
@@ -147,8 +182,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
     }
 
     /**
-     * Apply edit fields for the element administration area
-     * @return Fieldlist
+     * @inheritdoc
      */
     public function getCMSFields() {
         $fields = parent::getCMSFields();
@@ -198,26 +232,41 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         return $fields;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function canView($member = null)
     {
         return Permission::checkMember($member, 'CURATOR_FEED_VIEW');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function canCreate($member = null, $context = [])
     {
         return Permission::checkMember($member, 'CURATOR_FEED_CREATE');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function canEdit($member = null)
     {
         return Permission::checkMember($member, 'CURATOR_FEED_EDIT');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function canDelete($member = null)
     {
         return Permission::checkMember($member, 'CURATOR_FEED_DELETE');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function providePermissions()
     {
         return [
