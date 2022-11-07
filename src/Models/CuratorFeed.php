@@ -110,36 +110,6 @@ class CuratorFeed extends DataObject implements PermissionProvider {
     }
 
     /**
-     * Upgrade elements to use Curator feed
-     */
-    public function requireDefaultRecords() {
-        $elements = ElementCuratorFeedWidget::get();
-        foreach($elements as $element) {
-            if($element->CuratorFeedId && $element->CuratorContainerId) {
-                $record = [
-                    'CuratorFeedId' => $element->CuratorFeedId,
-                    'CuratorContainerId' => $element->CuratorContainerId
-                ];
-                $feed = CuratorFeed::get()->filter($record)->first();
-                if(empty($feed->ID)) {
-                    // create a feed
-                    $feed = CuratorFeed::create( $record );
-                    $feed->CuratorFeedDescription = $element->FeedDescription;
-                    $feed_id = $feed->write();
-                    if($feed_id) {
-                        $element->CuratorFeedRecordID = $feed_id;
-                        $element->CuratorFeedId = '';
-                        $element->CuratorContainerId = '';
-                        $element->FeedDescription = '';
-                        $element->write();
-                        DB::alteration_message("Moved element #{$element->ID} to Curator Feed #{$feed_id}","changed");
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Free accounts require this text in the template.
      * You can turn this off in project conifiguration
      * @return bool
