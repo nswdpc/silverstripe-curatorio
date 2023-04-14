@@ -9,9 +9,19 @@ use SilverStripe\View\Requirements;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
+use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutoCompleter;
+use SilverStripe\Forms\GridField\GridFieldEditButton;
+use SilverStripe\Forms\GridField\GridFieldViewButton;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\Forms\GridField\GridFieldConfig_Base;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Permission;
+use SilverStripe\Versioned\GridFieldArchiveAction;
 use SilverStripe\View\ArrayData;
 
 /**
@@ -68,7 +78,8 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         'Title' => 'Title',
         'CuratorFeedId' => 'Curator Feed Public Key',
         'CuratorContainerId' => 'Curator Container ID',
-        'CuratorFeedDescription' => 'Description'
+        'CuratorFeedDescription' => 'Description',
+        'FeedWidgets.Count' => 'Content blocks'
     ];
 
     /**
@@ -170,6 +181,48 @@ class CuratorFeed extends DataObject implements PermissionProvider {
             'CuratorFeedId',
             'CuratorContainerId'
         ]);
+
+        $feedWidgetsField = $fields->dataFieldByName('FeedWidgets');
+        if($feedWidgetsField instanceof GridField) {
+            $fieldConfig = $feedWidgetsField->getConfig();
+            $fieldConfig->removeComponentsByType( [
+                GridFieldAddNewButton::class,
+                GridFieldAddExistingAutoCompleter::class,
+                GridFieldEditButton::class,
+                GridFieldArchiveAction::class,
+                GridFieldDeleteAction::class,
+                GridFieldViewButton::class
+            ] );
+            $dataColumns = $fieldConfig->getComponentByType( GridFieldDataColumns::class );
+            $displayFields = [];
+            $displayFields["Title"] = [
+                'title' => _t(__CLASS__ . ".ELEMENT_TITLE", "Title"),
+                'callback' => function ($record, $column, $grid) {
+                    return $record->Title;
+                }
+            ];
+            $displayFields["PageTitle"] = [
+                'title' => _t(__CLASS__ . ".ELEMENT_LOCATION", "Location"),
+                'callback' => function ($record, $column, $grid) {
+                    $owner = $record->getPage();
+                    if($owner) {
+                        if($owner->hasMethod('CMSEditLink')) {
+                            $html = "<a href=\"" . htmlspecialchars($owner->CMSEditLink()) . "\">" . htmlspecialchars($owner->Title) . "</a>";
+                        } else {
+                            $html = htmlspecialchars($owner->Title);
+                        }
+                        return LiteralField::create(
+                            "LinkToLocation_Record{$record->ID}",
+                            $html
+                        );
+                    } else {
+                        return _t(__CLASS__ . ".ELEMENT_LOCATION_NONE", "Not linked to any location");
+                    }
+                }
+            ];
+            $dataColumns->setDisplayFields( $displayFields );
+        }
+
         $fields->addFieldsToTab(
             'Root.Main',
             [
