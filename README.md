@@ -4,9 +4,11 @@ This module provides a content block that a CMS editor can use to embed a config
 
 ## Features
 
-Add a feed to your website by copying the Curator Feed ID and Container ID values to the element administration area, then save and optionally publish the element to display a curated social feed on your website.
+* Add feeds to your website in its Curator administration screen, accessed via the standard Silverstripe left side menu.
 
-All feed moderation and styling occurs in the [Curator.io administration area](https://app.curator.io/).
+* Display feeds on pages using the "Curator.io Feed Widget" block
+
+* Moderate and style feeds in the [Curator.io administration area](https://app.curator.io/).
 
 Help for CMS editors is available on the [documentation for content authors](./docs/en/001_index.md) page.
 
@@ -26,8 +28,6 @@ composer require nswdpc/silverstripe-curatorio
 
 
 ## Configuration
-
-There is no current configuration other than base elemental configuration.
 
 Developers, see [config.yml](./_config/config.yml) for module configuration values.
 
