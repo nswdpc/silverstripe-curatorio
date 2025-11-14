@@ -28,7 +28,7 @@ class CuratorWidgetTest extends SapphireTest
     /**
      * Test the widget template
      */
-    public function testWidget() {
+    public function testWidget(): void {
 
         $element = $this->objFromFixture( ElementCuratorFeedWidget::class, 'testfeedelement1');
         $feedRecord = $element->CuratorFeedRecord();
@@ -38,12 +38,12 @@ class CuratorWidgetTest extends SapphireTest
 
         $template = $element->forTemplate();
 
-        $this->assertTrue(strpos($template, "<div id=\"{$feedRecord->CuratorContainerId}\">") !== false, "The div element ID is wrong for the container");
+        $this->assertTrue(str_contains((string) $template, "<div id=\"{$feedRecord->CuratorContainerId}\">"), "The div element ID is wrong for the container");
 
         if($element->config()->get('include_powered_by')) {
-            $this->assertTrue( strpos($template, "Powered by Curator.io") !== false, "Powered by value should be present" );
+            $this->assertTrue( str_contains((string) $template, "Powered by Curator.io"), "Powered by value should be present" );
         } else {
-            $this->assertFalse( strpos($template, "Powered by Curator.io") !== false, "Powered by value should not be present" );
+            $this->assertFalse( str_contains((string) $template, "Powered by Curator.io"), "Powered by value should not be present" );
         }
 
         $scripts = Requirements::get_custom_scripts();

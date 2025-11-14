@@ -15,22 +15,22 @@ class CuratorFeedAdmin extends ModelAdmin
     /**
      * @inheritdoc
      */
-    private static $managed_models = [
+    private static array $managed_models = [
         CuratorFeed::class
     ];
 
     /**
      * @inheritdoc
      */
-    private static $menu_title = 'Curator.io';
+    private static string $menu_title = 'Curator.io';
 
     /**
      * @inheritdoc
      */
-    private static $menu_icon_class = 'font-icon-block-carousel';
+    private static string $menu_icon_class = 'font-icon-block-carousel';
 
     /**
      * @inheritdoc
      */
-    private static $url_segment = 'curatorio';
+    private static string $url_segment = 'curatorio';
 }
