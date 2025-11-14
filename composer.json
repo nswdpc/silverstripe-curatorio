@@ -16,16 +16,6 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/nswdpc/silverstripe-link.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/nswdpc/silverstripe-linkfield.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "NSWDPC\\Elemental\\Models\\Curator\\": [
