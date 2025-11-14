@@ -3,7 +3,7 @@
 namespace NSWDPC\Elemental\Extensions\Curator;
 
 use NSWDPC\Elemental\Models\Curator\CuratorFeed;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\DropdownField;
 
@@ -13,9 +13,9 @@ use SilverStripe\Forms\DropdownField;
  * @author James
  * @property int $CuratorFeedRecordID
  * @method \NSWDPC\Elemental\Models\Curator\CuratorFeed CuratorFeedRecord()
- * @extends \SilverStripe\ORM\DataExtension<(\SilverStripe\SiteConfig\SiteConfig & static)>
+ * @extends \SilverStripe\Core\Extension<(\SilverStripe\SiteConfig\SiteConfig & static)>
  */
-class SiteConfigExtension extends DataExtension
+class SiteConfigExtension extends Extension
 {
     /**
      * @inheritdoc
