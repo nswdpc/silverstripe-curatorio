@@ -4,7 +4,6 @@ namespace NSWDPC\Elemental\Models\Curator;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\View\ArrayData;
 
 /**
  * Provides a Curator Widget Element
