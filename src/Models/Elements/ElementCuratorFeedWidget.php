@@ -52,7 +52,7 @@ class ElementCuratorFeedWidget extends BaseElement
     /**
      * @inheritdoc
      */
-    private static string $description = 'Display a published feed from Curator.io';
+    private static string $class_description = 'Display a published feed from Curator.io';
 
     /**
      * If you have a free Curator.io account this message must be included
@@ -101,7 +101,7 @@ class ElementCuratorFeedWidget extends BaseElement
         // Ensure the element values are used for rendering
         $feed = $this->CuratorFeedRecord();
         if ($feed) {
-            $data = ArrayData::create([
+            $data = \SilverStripe\Model\ArrayData::create([
                 'Title' => $this->Title,
                 'ShowTitle' => $this->ShowTitle,
             ]);
