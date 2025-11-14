@@ -8,7 +8,7 @@ use SilverStripe\Admin\ModelAdmin;
 /**
  * Curator Feed Admin, for editing/creating/deleting feeds
  *
- * @author james.ellis@dpc.nsw.gov.au
+ * @author James
  */
 class CuratorFeedAdmin extends ModelAdmin
 {

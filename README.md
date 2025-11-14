@@ -33,7 +33,7 @@ Developers, see [config.yml](./_config/config.yml) for module configuration valu
 
 ## Maintainers
 
-+ [dpcdigital@NSWDPC:~$](https://dpc.nsw.gov.au)
++ PD Web Team
 
 
 ## Bugtracker
