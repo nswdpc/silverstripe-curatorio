@@ -96,7 +96,7 @@ class ElementCuratorFeedWidget extends BaseElement
      * Render this element with the Curator Feed record
      */
     #[\Override]
-    public function forTemplate($holder = true)
+    public function forTemplate($holder = true): string
     {
         // Ensure the element values are used for rendering
         $feed = $this->CuratorFeedRecord();

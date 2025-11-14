@@ -159,7 +159,7 @@ class CuratorFeed extends DataObject implements PermissionProvider
     /**
      * Apply requirements when templating
      */
-    public function forTemplate($holder = true)
+    public function forTemplate(): string
     {
         $this->supplyRequirements();
         return $this->renderWith(ElementCuratorFeedWidget::class);
