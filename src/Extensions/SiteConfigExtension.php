@@ -17,7 +17,6 @@ use SilverStripe\Forms\DropdownField;
  */
 class SiteConfigExtension extends DataExtension
 {
-
     /**
      * @inheritdoc
      */
@@ -46,7 +45,8 @@ class SiteConfigExtension extends DataExtension
      * To add the field to your own SiteConfig extension, call this method
      * e.g $this->owner->getSocialFeedSelector()
      */
-    public function getSocialFeedSelector() : DropdownField {
+    public function getSocialFeedSelector(): DropdownField
+    {
         return DropdownField::create(
             'CuratorFeedRecordID',
             _t(self::class. '.SELECT_CURATOR_FEED', 'Select a global Curator.io feed'),
@@ -57,7 +57,8 @@ class SiteConfigExtension extends DataExtension
     /**
      * @return CuratorFeed|null
      */
-    public function getSocialFeedRecord() {
+    public function getSocialFeedRecord()
+    {
         return $this->getOwner()->CuratorFeedRecord();
     }
 

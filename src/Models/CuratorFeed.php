@@ -6,11 +6,8 @@ use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\View\Requirements;
-use SilverStripe\ORM\ValidationException;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\DB;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
@@ -18,11 +15,9 @@ use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldViewButton;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldConfig_Base;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\GridFieldArchiveAction;
-use SilverStripe\View\ArrayData;
 
 /**
  * Allows a curator feed to be configured
@@ -35,8 +30,8 @@ use SilverStripe\View\ArrayData;
  * @property ?string $CuratorContainerId
  * @method \SilverStripe\ORM\HasManyList<\NSWDPC\Elemental\Models\Curator\ElementCuratorFeedWidget> FeedWidgets()
  */
-class CuratorFeed extends DataObject implements PermissionProvider {
-
+class CuratorFeed extends DataObject implements PermissionProvider
+{
     /**
      * @inheritdoc
      */
@@ -115,13 +110,13 @@ class CuratorFeed extends DataObject implements PermissionProvider {
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        if($this->exists()) {
-            if(empty($this->CuratorFeedId)) {
-                throw \SilverStripe\ORM\ValidationException::create(_t(self::class . ".NO_FEED_ID","Please provide a Curator.io Feed Public Key"));
+        if ($this->exists()) {
+            if (empty($this->CuratorFeedId)) {
+                throw \SilverStripe\ORM\ValidationException::create(_t(self::class . ".NO_FEED_ID", "Please provide a Curator.io Feed Public Key"));
             }
 
-            if(empty($this->CuratorContainerId)) {
-                throw \SilverStripe\ORM\ValidationException::create(_t(self::class . ".NO_FEED_ID","Please provide a Curator.io Container Id"));
+            if (empty($this->CuratorContainerId)) {
+                throw \SilverStripe\ORM\ValidationException::create(_t(self::class . ".NO_FEED_ID", "Please provide a Curator.io Container Id"));
             }
         }
     }
@@ -131,23 +126,26 @@ class CuratorFeed extends DataObject implements PermissionProvider {
      * You can turn this off in project conifiguration
      * @return bool
      */
-    public function IncludePoweredBy() {
+    public function IncludePoweredBy()
+    {
         return $this->config()->get('include_powered_by');
     }
 
     /**
      * Return this record rendered into the feed script template
      */
-    public function getCustomFeedScript() {
+    public function getCustomFeedScript()
+    {
         return $this->renderWith("NSWDPC/Elemental/Models/Curator/FeedScript");
     }
 
     /**
      * Push the custom script for this feed into the Requirements API
      */
-    public function supplyRequirements() {
+    public function supplyRequirements()
+    {
         // Avoid adding requirements multiple times
-        if(!$this->_cache_is_rendered) {
+        if (!$this->_cache_is_rendered) {
             // add the requirements for this feed
             Requirements::customScript(
                 $this->getCustomFeedScript(),
@@ -181,7 +179,8 @@ class CuratorFeed extends DataObject implements PermissionProvider {
      * @inheritdoc
      */
     #[\Override]
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
         $fields->removeByName([
             'Title',
@@ -191,28 +190,28 @@ class CuratorFeed extends DataObject implements PermissionProvider {
         ]);
 
         $feedWidgetsField = $fields->dataFieldByName('FeedWidgets');
-        if($feedWidgetsField instanceof GridField) {
+        if ($feedWidgetsField instanceof GridField) {
             $fieldConfig = $feedWidgetsField->getConfig();
-            $fieldConfig->removeComponentsByType( [
+            $fieldConfig->removeComponentsByType([
                 GridFieldAddNewButton::class,
                 GridFieldAddExistingAutoCompleter::class,
                 GridFieldEditButton::class,
                 GridFieldArchiveAction::class,
                 GridFieldDeleteAction::class,
                 GridFieldViewButton::class
-            ] );
-            $dataColumns = $fieldConfig->getComponentByType( GridFieldDataColumns::class );
+            ]);
+            $dataColumns = $fieldConfig->getComponentByType(GridFieldDataColumns::class);
             $displayFields = [];
             $displayFields["Title"] = [
                 'title' => _t(self::class . ".ELEMENT_TITLE", "Title"),
-                'callback' => fn($record, $column, $grid) => $record->Title
+                'callback' => fn ($record, $column, $grid) => $record->Title
             ];
             $displayFields["PageTitle"] = [
                 'title' => _t(self::class . ".ELEMENT_LOCATION", "Location"),
                 'callback' => function ($record, $column, $grid) {
                     $owner = $record->getPage();
-                    if($owner) {
-                        if($owner->hasMethod('CMSEditLink')) {
+                    if ($owner) {
+                        if ($owner->hasMethod('CMSEditLink')) {
                             $html = '<a href="' . htmlspecialchars((string) $owner->CMSEditLink()) . '">' . htmlspecialchars((string) $owner->Title) . "</a>";
                         } else {
                             $html = htmlspecialchars((string) $owner->Title);
@@ -227,7 +226,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
                     }
                 }
             ];
-            $dataColumns->setDisplayFields( $displayFields );
+            $dataColumns->setDisplayFields($displayFields);
         }
 
         $fields->addFieldsToTab(
@@ -243,7 +242,6 @@ class CuratorFeed extends DataObject implements PermissionProvider {
                             "This value identifies the feed on this website"
                         )
                     ),
-
                     TextareaField::create(
                         'CuratorFeedDescription',
                         _t(
@@ -264,7 +262,6 @@ class CuratorFeed extends DataObject implements PermissionProvider {
                 ),
 
                 CompositeField::create(
-
                     TextField::create(
                         'CuratorFeedId',
                         'Feed Public Key'
@@ -273,8 +270,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
                             self::class . '.CURATOR_FEED_ID_DESCRIPTION',
                             "You can find this value in the 'Publish' section under 'Feed Public Key' at app.curator.io"
                         )
-                    )->setAttribute('required','required'),
-
+                    )->setAttribute('required', 'required'),
                     TextField::create(
                         'CuratorContainerId',
                         'Container Id'
@@ -283,8 +279,7 @@ class CuratorFeed extends DataObject implements PermissionProvider {
                             self::class . '.CURATOR_FEED_ID_DESCRIPTION',
                             "You can find this value in the 'Publish' section under 'Advanced' at app.curator.io"
                         )
-                    )->setAttribute('required','required')
-
+                    )->setAttribute('required', 'required')
                 )->setTitle(
                     _t(
                         self::class . '.CURATOR_FEED_ADMIN_CURATOR_INFO',

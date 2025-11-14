@@ -4,9 +4,6 @@ namespace NSWDPC\Elemental\Models\Curator;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\View\Requirements;
-use SilverStripe\ORM\ValidationException;
-use SilverStripe\Forms\RequiredFields;
 use SilverStripe\View\ArrayData;
 
 /**
@@ -20,8 +17,8 @@ use SilverStripe\View\ArrayData;
  * @property int $CuratorFeedRecordID
  * @method \NSWDPC\Elemental\Models\Curator\CuratorFeed CuratorFeedRecord()
  */
-class ElementCuratorFeedWidget extends BaseElement {
-
+class ElementCuratorFeedWidget extends BaseElement
+{
     /**
      * @inheritdoc
      */
@@ -83,7 +80,8 @@ class ElementCuratorFeedWidget extends BaseElement {
      * Return a nicer anchor title
      * @return string
      */
-    public function getAnchorTitle() {
+    public function getAnchorTitle()
+    {
         $feed = $this->CuratorFeedRecord();
         return _t(
             self::class . '.FEED_TITLE',
@@ -102,13 +100,13 @@ class ElementCuratorFeedWidget extends BaseElement {
     {
         // Ensure the element values are used for rendering
         $feed = $this->CuratorFeedRecord();
-        if($feed) {
+        if ($feed) {
             $data = ArrayData::create([
                 'Title' => $this->Title,
                 'ShowTitle' => $this->ShowTitle,
             ]);
             $feed->supplyRequirements();
-            return $feed->customise($data)->renderWith( self::class );
+            return $feed->customise($data)->renderWith(self::class);
         }
 
         return '';
@@ -118,7 +116,8 @@ class ElementCuratorFeedWidget extends BaseElement {
      * @inheritdoc
      */
     #[\Override]
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
         $fields->addFieldsToTab(
             'Root.Main',
