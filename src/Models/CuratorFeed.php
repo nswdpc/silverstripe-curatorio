@@ -100,6 +100,11 @@ class CuratorFeed extends DataObject implements PermissionProvider {
     ];
 
     /**
+     * Store whether the feed was rendered in this instance
+     */
+    private $_cache_is_rendered = false;
+
+    /**
      * @inheritdoc
      */
     public function onBeforeWrite()

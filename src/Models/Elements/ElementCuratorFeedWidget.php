@@ -56,11 +56,6 @@ class ElementCuratorFeedWidget extends BaseElement {
     private static $description = 'Display a published feed from Curator.io';
 
     /**
-     * Store whether the element was rendered in this instance
-     */
-    private $_cache_is_rendered = false;
-
-    /**
      * If you have a free Curator.io account this message must be included
      * @var boolean
      */
