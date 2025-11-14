@@ -3,22 +3,24 @@
 namespace NSWDPC\Elemental\Extensions\Curator;
 
 use NSWDPC\Elemental\Models\Curator\CuratorFeed;
-use Silverstripe\ORM\DataExtension;
-use Silverstripe\Forms\FieldList;
-use Silverstripe\Forms\DropdownField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\DropdownField;
 
 /**
  * Provide content administrators the ability to select a global site social feed
  * from a list of configured feeds
  * @author James
+ * @property int $CuratorFeedRecordID
+ * @method \NSWDPC\Elemental\Models\Curator\CuratorFeed CuratorFeedRecord()
+ * @extends \SilverStripe\ORM\DataExtension<(\SilverStripe\SiteConfig\SiteConfig & static)>
  */
 class SiteConfigExtension extends DataExtension
 {
-
     /**
      * @inheritdoc
      */
-    private static $has_one = [
+    private static array $has_one = [
         'CuratorFeedRecord' => CuratorFeed::class
     ];
 
@@ -32,7 +34,7 @@ class SiteConfigExtension extends DataExtension
             [
                 DropdownField::create(
                     'CuratorFeedRecordID',
-                    _t(__CLASS__. '.SELECT_CURATOR_FEED', 'Select a global Curator.io feed'),
+                    _t(self::class. '.SELECT_CURATOR_FEED', 'Select a global Curator.io feed'),
                     CuratorFeed::get()->map('ID', 'Title')
                 )->setEmptyString('')
             ]
@@ -42,22 +44,22 @@ class SiteConfigExtension extends DataExtension
     /**
      * To add the field to your own SiteConfig extension, call this method
      * e.g $this->owner->getSocialFeedSelector()
-     * @return DropdownField
      */
-    public function getSocialFeedSelector() : DropdownField {
-        $field = DropdownField::create(
+    public function getSocialFeedSelector(): DropdownField
+    {
+        return DropdownField::create(
             'CuratorFeedRecordID',
-            _t(__CLASS__. '.SELECT_CURATOR_FEED', 'Select a global Curator.io feed'),
+            _t(self::class. '.SELECT_CURATOR_FEED', 'Select a global Curator.io feed'),
             CuratorFeed::get()->map('ID', 'Title')
         )->setEmptyString('');
-        return $field;
     }
 
     /**
      * @return CuratorFeed|null
      */
-    public function getSocialFeedRecord() {
-        return $this->owner->CuratorFeedRecord();
+    public function getSocialFeedRecord()
+    {
+        return $this->getOwner()->CuratorFeedRecord();
     }
 
 }

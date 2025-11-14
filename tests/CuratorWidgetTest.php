@@ -4,7 +4,6 @@ namespace NSWDPC\Elemental\Tests\Curator;
 
 use NSWDPC\Elemental\Models\Curator\CuratorFeed;
 use NSWDPC\Elemental\Models\Curator\ElementCuratorFeedWidget;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\View\Requirements;
 
@@ -14,7 +13,6 @@ use SilverStripe\View\Requirements;
  */
 class CuratorWidgetTest extends SapphireTest
 {
-
     /**
      * @inheritdoc
      */
@@ -28,27 +26,28 @@ class CuratorWidgetTest extends SapphireTest
     /**
      * Test the widget template
      */
-    public function testWidget() {
+    public function testWidget(): void
+    {
 
-        $element = $this->objFromFixture( ElementCuratorFeedWidget::class, 'testfeedelement1');
+        $element = $this->objFromFixture(ElementCuratorFeedWidget::class, 'testfeedelement1');
         $feedRecord = $element->CuratorFeedRecord();
 
-        $this->assertInstanceOf( CuratorFeed::class, $feedRecord );
-        $this->assertTrue( $feedRecord->exists() );
+        $this->assertInstanceOf(CuratorFeed::class, $feedRecord);
+        $this->assertTrue($feedRecord->exists());
 
         $template = $element->forTemplate();
 
-        $this->assertTrue(strpos($template, "<div id=\"{$feedRecord->CuratorContainerId}\">") !== false, "The div element ID is wrong for the container");
+        $this->assertTrue(str_contains((string) $template, "<div id=\"{$feedRecord->CuratorContainerId}\">"), "The div element ID is wrong for the container");
 
-        if($element->config()->get('include_powered_by')) {
-            $this->assertTrue( strpos($template, "Powered by Curator.io") !== false, "Powered by value should be present" );
+        if ($element->config()->get('include_powered_by')) {
+            $this->assertTrue(str_contains((string) $template, "Powered by Curator.io"), "Powered by value should be present");
         } else {
-            $this->assertFalse( strpos($template, "Powered by Curator.io") !== false, "Powered by value should not be present" );
+            $this->assertFalse(str_contains((string) $template, "Powered by Curator.io"), "Powered by value should not be present");
         }
 
         $scripts = Requirements::get_custom_scripts();
 
-        $this->assertTrue( is_array($scripts) && array_key_exists("curator_feed_{$feedRecord->CuratorFeedId}", $scripts), "Requirements do not exist" );
+        $this->assertTrue(is_array($scripts) && array_key_exists("curator_feed_{$feedRecord->CuratorFeedId}", $scripts), "Requirements do not exist");
 
     }
 

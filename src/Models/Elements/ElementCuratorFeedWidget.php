@@ -3,10 +3,7 @@
 namespace NSWDPC\Elemental\Models\Curator;
 
 use DNADesign\Elemental\Models\BaseElement;
-use Silverstripe\Forms\DropdownField;
-use SilverStripe\View\Requirements;
-use SilverStripe\ORM\ValidationException;
-use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\View\ArrayData;
 
 /**
@@ -17,59 +14,55 @@ use SilverStripe\View\ArrayData;
  * Feed curation occurs in the Curator.io administration area at app.curator.io
  *
  * @author James Ellis
+ * @property int $CuratorFeedRecordID
+ * @method \NSWDPC\Elemental\Models\Curator\CuratorFeed CuratorFeedRecord()
  */
-class ElementCuratorFeedWidget extends BaseElement {
+class ElementCuratorFeedWidget extends BaseElement
+{
+    /**
+     * @inheritdoc
+     */
+    private static string $table_name = 'ElementCuratorFeedWidget';
 
     /**
      * @inheritdoc
      */
-    private static $table_name = 'ElementCuratorFeedWidget';
+    private static string $icon = 'font-icon-block-carousel';
 
     /**
      * @inheritdoc
      */
-    private static $icon = 'font-icon-block-carousel';
+    private static bool $inline_editable = true;
 
     /**
      * @inheritdoc
      */
-    private static $inline_editable = true;
+    private static string $singular_name = 'Curator.io feed widget';
 
     /**
      * @inheritdoc
      */
-    private static $singular_name = 'Curator.io feed widget';
+    private static string $plural_name = 'Curator.io feed widgets';
 
     /**
      * @inheritdoc
      */
-    private static $plural_name = 'Curator.io feed widgets';
+    private static string $title = 'Curator.io feed widget';
 
     /**
      * @inheritdoc
      */
-    private static $title = 'Curator.io feed widget';
-
-    /**
-     * @inheritdoc
-     */
-    private static $description = 'Display a published feed from Curator.io';
-
-    /**
-     * Store whether the element was rendered in this instance
-     */
-    private $_cache_is_rendered = false;
+    private static string $description = 'Display a published feed from Curator.io';
 
     /**
      * If you have a free Curator.io account this message must be included
-     * @var boolean
      */
-    private static $include_powered_by = true;
+    private static bool $include_powered_by = true;
 
     /**
      * @inheritdoc
      */
-    private static $has_one = [
+    private static array $has_one = [
         'CuratorFeedRecord' => CuratorFeed::class,
     ];
 
@@ -77,22 +70,24 @@ class ElementCuratorFeedWidget extends BaseElement {
      * Elemental Type value
       * @return string
      */
+    #[\Override]
     public function getType()
     {
-        return _t(__CLASS__ . '.BlockType', 'Curator.io Feed Widget');
+        return _t(self::class . '.BlockType', 'Curator.io Feed Widget');
     }
 
     /**
      * Return a nicer anchor title
      * @return string
      */
-    public function getAnchorTitle() {
+    public function getAnchorTitle()
+    {
         $feed = $this->CuratorFeedRecord();
         return _t(
-            __CLASS__ . '.FEED_TITLE',
+            self::class . '.FEED_TITLE',
             "Curator.io feed {feedid}",
             [
-                'feedid' => isset($feed->CuratorFeedId) ? $feed->CuratorFeedId : _t(__CLASS__ . '.NO_FEED_ID', '(no feed id)')
+                'feedid' => $feed->CuratorFeedId ?? _t(self::class . '.NO_FEED_ID', '(no feed id)')
             ]
         );
     }
@@ -100,32 +95,36 @@ class ElementCuratorFeedWidget extends BaseElement {
     /**
      * Render this element with the Curator Feed record
      */
+    #[\Override]
     public function forTemplate($holder = true)
     {
         // Ensure the element values are used for rendering
         $feed = $this->CuratorFeedRecord();
-        if($feed) {
+        if ($feed) {
             $data = ArrayData::create([
                 'Title' => $this->Title,
                 'ShowTitle' => $this->ShowTitle,
             ]);
             $feed->supplyRequirements();
-            return $feed->customise($data)->renderWith( self::class );
+            return $feed->customise($data)->renderWith(self::class);
         }
+
         return '';
     }
 
     /**
      * @inheritdoc
      */
-    public function getCMSFields() {
+    #[\Override]
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
         $fields->addFieldsToTab(
             'Root.Main',
             [
                 DropdownField::create(
                     'CuratorFeedRecordID',
-                    _t(__CLASS__. '.SELECT_CURATOR_FEED', 'Select a Curator.io feed'),
+                    _t(self::class. '.SELECT_CURATOR_FEED', 'Select a Curator.io feed'),
                     CuratorFeed::get()->map('ID', 'Title')
                 )->setEmptyString('')
             ]
