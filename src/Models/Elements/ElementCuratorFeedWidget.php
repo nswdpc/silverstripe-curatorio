@@ -3,7 +3,7 @@
 namespace NSWDPC\Elemental\Models\Curator;
 
 use DNADesign\Elemental\Models\BaseElement;
-use Silverstripe\Forms\DropdownField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Forms\RequiredFields;

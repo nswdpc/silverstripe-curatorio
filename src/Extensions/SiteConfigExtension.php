@@ -3,9 +3,9 @@
 namespace NSWDPC\Elemental\Extensions\Curator;
 
 use NSWDPC\Elemental\Models\Curator\CuratorFeed;
-use Silverstripe\ORM\DataExtension;
-use Silverstripe\Forms\FieldList;
-use Silverstripe\Forms\DropdownField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\DropdownField;
 
 /**
  * Provide content administrators the ability to select a global site social feed
