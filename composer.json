@@ -16,6 +16,16 @@
             "role": "Developer"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "NSWDPC\\Elemental\\Models\\Curator\\": [
+                "src/Models/",
+                "src/Models/Elements/"
+            ],
+            "NSWDPC\\Elemental\\Extensions\\Curator\\": "src/Extensions/",
+            "NSWDPC\\Elemental\\Controllers\\Curator\\": "src/Controllers/"
+        }
+    },
     "require": {
         "dnadesign/silverstripe-elemental": "^5"
     },
