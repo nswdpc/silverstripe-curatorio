@@ -17,7 +17,7 @@ This assumes you have connected up your relevant social accounts in Curator.
 
 ## Getting the Feed Public Key and Container ID values
 
-This screenshot shows the feed style screen in Curator.io. On this screen you can retrieve the Container ID and Feed Public Key (formerly Feed Id) values.
+Retrieve the Container ID and Feed Public Key (formerly Feed Id) values in the "Publish" > "Keys" section.
 
 <img src="../img/example.png">
 
