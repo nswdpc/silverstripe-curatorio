@@ -4,7 +4,6 @@ namespace NSWDPC\Elemental\Models\Curator;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\View\ArrayData;
 
 /**
  * Provides a Curator Widget Element
@@ -52,7 +51,7 @@ class ElementCuratorFeedWidget extends BaseElement
     /**
      * @inheritdoc
      */
-    private static string $description = 'Display a published feed from Curator.io';
+    private static string $class_description = 'Display a published feed from Curator.io';
 
     /**
      * If you have a free Curator.io account this message must be included
@@ -96,12 +95,12 @@ class ElementCuratorFeedWidget extends BaseElement
      * Render this element with the Curator Feed record
      */
     #[\Override]
-    public function forTemplate($holder = true)
+    public function forTemplate($holder = true): string
     {
         // Ensure the element values are used for rendering
         $feed = $this->CuratorFeedRecord();
         if ($feed) {
-            $data = ArrayData::create([
+            $data = \SilverStripe\Model\ArrayData::create([
                 'Title' => $this->Title,
                 'ShowTitle' => $this->ShowTitle,
             ]);

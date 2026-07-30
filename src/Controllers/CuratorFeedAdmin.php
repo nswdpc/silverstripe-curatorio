@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NSWDPC\Elemental\Controllers\Curator;
 
 use NSWDPC\Elemental\Models\Curator\CuratorFeed;

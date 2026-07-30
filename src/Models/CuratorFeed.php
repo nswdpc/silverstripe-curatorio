@@ -112,11 +112,11 @@ class CuratorFeed extends DataObject implements PermissionProvider
         parent::onBeforeWrite();
         if ($this->exists()) {
             if (empty($this->CuratorFeedId)) {
-                throw \SilverStripe\ORM\ValidationException::create(_t(self::class . ".NO_FEED_ID", "Please provide a Curator.io Feed Public Key"));
+                throw \SilverStripe\Core\Validation\ValidationException::create(_t(self::class . ".NO_FEED_ID", "Please provide a Curator.io Feed Public Key"));
             }
 
             if (empty($this->CuratorContainerId)) {
-                throw \SilverStripe\ORM\ValidationException::create(_t(self::class . ".NO_FEED_ID", "Please provide a Curator.io Container Id"));
+                throw \SilverStripe\Core\Validation\ValidationException::create(_t(self::class . ".NO_FEED_ID", "Please provide a Curator.io Container Id"));
             }
         }
     }
@@ -134,7 +134,7 @@ class CuratorFeed extends DataObject implements PermissionProvider
     /**
      * Return this record rendered into the feed script template
      */
-    public function getCustomFeedScript()
+    public function getCustomFeedScript(): \SilverStripe\ORM\FieldType\DBHTMLText
     {
         return $this->renderWith("NSWDPC/Elemental/Models/Curator/FeedScript");
     }
@@ -159,7 +159,8 @@ class CuratorFeed extends DataObject implements PermissionProvider
     /**
      * Apply requirements when templating
      */
-    public function forTemplate($holder = true)
+    #[\Override]
+    public function forTemplate(): string
     {
         $this->supplyRequirements();
         return $this->renderWith(ElementCuratorFeedWidget::class);
@@ -168,9 +169,9 @@ class CuratorFeed extends DataObject implements PermissionProvider
     /**
      * @inheritdoc
      */
-    public function getCMSValidator(): \SilverStripe\Forms\RequiredFields
+    public function getCMSValidator(): \SilverStripe\Forms\Validation\RequiredFieldsValidator
     {
-        return \SilverStripe\Forms\RequiredFields::create([
+        return \SilverStripe\Forms\Validation\RequiredFieldsValidator::create([
             'CuratorFeedId','CuratorContainerId'
         ]);
     }
